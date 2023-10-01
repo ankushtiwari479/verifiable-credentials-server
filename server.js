@@ -9,7 +9,6 @@ const cors = require('cors')
 const db = require('./db/db.js');
 const Credential = require('./db/models/Credential.js');
 const app = express();
-const puppeteer = require('puppeteer');
 const Student = require('./db/models/Student.js');
 const Admin = require('./db/models/Admin.js');
 const config = require('./config.js');

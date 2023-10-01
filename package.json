@@ -21,7 +21,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.3",
     "pdf-lib": "^1.17.1",
-    "puppeteer": "^21.3.6",
     "qrcode": "^1.5.3",
     "vc-js": "^0.6.4"
   },
