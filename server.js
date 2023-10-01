@@ -41,35 +41,13 @@ async function generateQRCode(url) {
   }
 
 
-  app.post('/verify/:id', async (req, res) => {
-  try {
-    const id = req.params.id;
-    const { password } = req.body
-    const admin = await Admin.findOne({ username:"admin", password });
-    if(admin){
-      let credential = await Credential.findOne({_id:id});
-      let verificationUrl = `${process.env.FRONT_URL}/verifydoc/${id}`
-      const imgCode = await generateQRCode(verificationUrl);
-      const htmlTemplate = generateHtml(credential)
-      res.status(200).json({credential:credential.toObject(),htmlTemplate})
-    }
-    else{
-      res.status(401).json({message:"not authorized"})
-    }
-  } catch (error) {
-    console.error('Error verifying verifiable credential:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-
 app.post('/viewdoc/:id', async (req, res) => {
   try {
     const id = req.params.id;
     let credential = await Credential.findOne({_id:id});
     let verificationUrl = `${process.env.FRONT_URL}/verifydoc/${id}`
     const imgCode = await generateQRCode(verificationUrl);
-    const htmlTemplate = generatePdf(credential,imgCode);
+    const htmlTemplate =  (credential,imgCode);
     res.status(200).json({credential:credential.toObject(),htmlTemplate})
   } catch (error) {
     console.error('Error verifying verifiable credential:', error);
