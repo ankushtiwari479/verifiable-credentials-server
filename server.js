@@ -15,7 +15,7 @@ const config = require('./config.js');
 const verifyToken = require('./middlewares/auth.js');
 const Course = require('./db/models/Course.js');
 const Enrollment = require('./db/models/Enrollment.js');
-const { formatDate } = require('./util.js')
+const { formatDate, generatePdf } = require('./util.js')
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
@@ -40,6 +40,44 @@ async function generateQRCode(url) {
     }
   }
 
+
+  app.post('/verify/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { password } = req.body
+    const admin = await Admin.findOne({ username:"admin", password });
+    if(admin){
+      let credential = await Credential.findOne({_id:id});
+      let verificationUrl = `${process.env.FRONT_URL}/verifydoc/${id}`
+      const imgCode = await generateQRCode(verificationUrl);
+      const htmlTemplate = generateHtml(credential)
+      res.status(200).json({credential:credential.toObject(),htmlTemplate})
+    }
+    else{
+      res.status(401).json({message:"not authorized"})
+    }
+  } catch (error) {
+    console.error('Error verifying verifiable credential:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+app.post('/viewdoc/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    let credential = await Credential.findOne({_id:id});
+    let verificationUrl = `${process.env.FRONT_URL}/verifydoc/${id}`
+    const imgCode = await generateQRCode(verificationUrl);
+    const htmlTemplate = generatePdf(credential,imgCode);
+    res.status(200).json({credential:credential.toObject(),htmlTemplate})
+  } catch (error) {
+    console.error('Error verifying verifiable credential:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 app.post('/verify/:id', async (req, res) => {
   try {
     const id = req.params.id;
@@ -49,50 +87,7 @@ app.post('/verify/:id', async (req, res) => {
       let credential = await Credential.findOne({_id:id});
       let verificationUrl = `${process.env.FRONT_URL}/verifydoc/${id}`
       const imgCode = await generateQRCode(verificationUrl);
-      const htmlTemplate = `
-      <html>
-      <head>
-        <title>CERTIFICATE OF COMPLETION</title>
-        <style>
-          td{
-            text-align:left;
-            font-family: monospace;
-          }
-
-        </style>
-      </head>
-      <body style="border: 1px solid black; padding: 2rem; margin: 2rem; background: #f5f6f7">
-        <p style="vertical-align: center;">
-          <img src="https://media.licdn.com/dms/image/C4E0BAQGflufdS6fZ6g/company-logo_200_200/0/1630252448412?e=2147483647&v=beta&t=yEnTuelNcbkkNqy0OniJX5a6CBxn16n6YCEjcu26x_M"
-            alt="TechEd Academy Logo" style="height: 40px; marginRight: 16px; width: 5rem; height: 5rem; margin: 0px auto; text-align: center" />
-        </p>
-        <h3 style="text-align: center;font-family: cursive;">CERTIFICATE OF COMPLETION</h3>
-        <table style="margin: 0px auto;">
-          <tr>
-            <td><strong>Issuer Name:</strong></td>
-            <td>${credential.issuerName}</td>
-          </tr>
-          <tr>
-            <td><strong>Student:</strong></td>
-            <td>${credential.studentDetails.name}</td>
-          </tr>
-          <tr>
-            <td><strong>Course:</strong></td>
-            <td>${credential.courseDetails.name}</td>
-          </tr>
-          <tr>
-            <td><strong>Roll No:</strong></td>
-            <td>${credential.studentDetails.rollNumber}</td>
-          </tr>
-          <tr>
-            <td><strong>Issuance Date:</strong></td>
-            <td>${formatDate(credential.issuanceDate)}</td>
-          </tr>
-        </table>
-        <img style="float: right; margin: 2rem 0;" src="data:image/png;base64,${imgCode}" />
-      </body>
-    </html>    
-      `;
+      const htmlTemplate = generatePdf(credential,imgCode);
       res.status(200).json({credential:credential.toObject(),htmlTemplate})
     }
     else{
