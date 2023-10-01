@@ -1,0 +1,33 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore build output
+build/
+dist/
+out/
+
+# Ignore environment-specific files
+.env
+.env.local
+.env.development
+.env.production
+
+# Ignore log files and data files
+*.log
+*.sqlite
+*.db
+
+# Ignore editor and IDE-specific files
+.vscode/
+.idea/
+
+# Ignore system and hidden files
+.DS_Store
+Thumbs.db
+
+# Ignore dependencies and lock files for various package managers
+npm-debug.log
+yarn-error.log
+yarn.lock
+package-lock.json
+

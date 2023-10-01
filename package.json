@@ -1,0 +1,31 @@
+{
+  "name": "verifiable-credentials-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "commonjs",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "crypto-ld": "^7.0.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonld": "^8.3.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.5.3",
+    "pdf-lib": "^1.17.1",
+    "puppeteer": "^21.3.6",
+    "qrcode": "^1.5.3",
+    "vc-js": "^0.6.4"
+  },
+  "engines": {
+    "node": "14.x",
+    "npm": "6.x"
+  }
+}
