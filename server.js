@@ -41,13 +41,14 @@ async function generateQRCode(url) {
   }
 
 
+
 app.post('/viewdoc/:id', async (req, res) => {
   try {
     const id = req.params.id;
     let credential = await Credential.findOne({_id:id});
     let verificationUrl = `${process.env.FRONT_URL}/verifydoc/${id}`
     const imgCode = await generateQRCode(verificationUrl);
-    const htmlTemplate =  (credential,imgCode);
+    const htmlTemplate =  generatePdf(credential,imgCode);
     res.status(200).json({credential:credential.toObject(),htmlTemplate})
   } catch (error) {
     console.error('Error verifying verifiable credential:', error);
