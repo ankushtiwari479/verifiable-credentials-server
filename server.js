@@ -46,7 +46,7 @@ app.post('/verify/:id', async (req, res) => {
     const admin = await Admin.findOne({ username:"admin", password });
     if(admin){
       let credential = await Credential.findOne({_id:id});
-      let verificationUrl = `http://localhost:3000/verifydoc/${id}`
+      let verificationUrl = `${process.env.FRONT_URL}/verifydoc/${id}`
       const imgCode = await generateQRCode(verificationUrl);
       const htmlTemplate = `
         <html>
