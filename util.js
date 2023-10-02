@@ -42,7 +42,7 @@ function formatDate(date) {
         <img src="https://media.licdn.com/dms/image/C4E0BAQGflufdS6fZ6g/company-logo_200_200/0/1630252448412?e=2147483647&v=beta&t=yEnTuelNcbkkNqy0OniJX5a6CBxn16n6YCEjcu26x_M"
           alt="TechEd Academy Logo" style="height: 40px; marginRight: 16px; width: 5rem; height: 5rem; margin: 0px auto; text-align: center" />
       </p>
-      <h3 style="text-align: center;font-family: cursive;">CERTIFICATE OF COMPLETION</h3>
+      <h3 style="text-align: center; font-family: monospace;">CERTIFICATE OF COMPLETION</h3>
       <table style="margin: 0px auto;">
         <tr>
           <td><strong>Issuer Name:</strong></td>
